@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <title>Promise Test</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1>Promise Test Page</h1>
+    <p>It is running on express</p>
+    <div class="story"></div>
+    <svg class="spinner" viewBox="0 0 100 100" width="20" height="20">
+      <circle cx="50" cy="50" r="42" transform="rotate(-90,50,50)" />
+    </svg>
+  <script>
+    function get(url){
+      return new Promise(function(resolve, reject){
+        var req = new XMLHttpRequest();
+        req.open('GET', url);
+
+        req.onload = function(){
+          if (req.status == 200){
+            resolve(req.responseText);
+          } else {
+            reject(Error(req.statusText));
+          }
+        };
+        
+        // Handle network errors
+        req.onerror = function() {
+          reject(Error("Network Error"));
+        };
+        
+        // Make the request
+        req.send();
+      });
+    }
+
+    function getJSON(url){
+      return get(url).then(JSON.parse);
+    }
+    var storyDiv = document.querySelector('.story');
+    function addHtmlToPage(content){
+      var div = document.createElement('div');
+      div.innerHTML = content;
+      storyDiv.appendChild(div);
+    }
+    var sequence = Promise.resolve();
+
+    getJSON('http://localhost:8080/story.json')
+    .then(function(story){
+      addHtmlToPage(story.heading);
+
+      return new Promise(function(resolve){
+        story.chapterUrls.forEach(function(chapterUrl){
+          return getJSON(chapterUrl).then(function(chapter){
+            addHtmlToPage(chapter.id);
+          })
+        });
+        resolve();
+      });
+    })
+    .then(function(){
+      document.querySelector('.spinner').style.display = 'none';
+    });
+
+  </script>
+  </body>
+</html>

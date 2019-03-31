@@ -1,0 +1,16 @@
+{
+    "message": "hahaha",
+    "response": "Yeah!",
+    "chapterUrls": [
+        "http://localhost:8080/chapter1",
+        "http://localhost:8080/chapter2",
+        "http://localhost:8080/chapter3",
+        "http://localhost:8080/chapter4",
+        "http://localhost:8080/chapter5",
+        "http://localhost:8080/chapter6",
+        "http://localhost:8080/chapter7",
+        "http://localhost:8080/chapter8",
+        "http://localhost:8080/chapter9"
+    ],
+    "heading": "<h1>Heading of Sotry</h1>"
+}
